@@ -1,12 +1,16 @@
 type FileName = "lastnames" | "man" | "woman";
 
-export interface IConfig {
+export interface IWebFile {
+  local?: false;
   url?: string;
-  local?: boolean;
-  lastnamePath?: string;
-  manNamePath?: string;
-  womanNamePath?: string;
 }
+
+export interface ILocalFile {
+  local: true;
+  path: string;
+}
+
+export type IConfig = ILocalFile | IWebFile;
 
 type ICache = {
   [key in FileName]: string[];
@@ -18,20 +22,13 @@ const cache: ICache = {
   woman: [],
 };
 
-const readLocalFile = async (file: FileName, config: IConfig) => {
+const readLocalFile = async (file: FileName, config: ILocalFile) => {
   return JSON.parse(
-    await Deno.readTextFile(
-      //@ts-ignore
-      file == "lastnames"
-        ? config.lastnamePath
-        : file == "man"
-        ? config.manNamePath
-        : config.womanNamePath
-    )
+    await Deno.readTextFile(`${config.path}/${file}.json`)
   ) as string[];
 };
 
-const readWebFile = async (file: FileName, config: IConfig) => {
+const readWebFile = async (file: FileName, config: IWebFile) => {
   const url =
     config.url ||
     "https://firebasestorage.googleapis.com/v0/b/files-4374e.appspot.com/o";
