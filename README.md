@@ -82,3 +82,61 @@ for (let i = 0; i < 5; i++) {
 
 console.log(users);
 ```
+
+## Config
+
+You can pass options in the second parameter of mockJson function.
+
+### MockJson from default provider
+
+If the configuration object is empty, the default provider will be used.
+
+```ts
+// Example
+await mockJson<User>(format, {});
+```
+
+### MockJson from local files
+
+You must set the **local** attribute to **true** and you need to add the **path** to the local files: **man.json**, **woman.json**, **lastnames.json**
+
+```ts
+// Example
+await mockJson<User>(format, {
+  local: true,
+  path: "./mock",
+});
+```
+
+```
+your_project    
+│  index.ts
+│
+└──mock
+│   │  man.json
+│   │  woman.json
+│   │  lastnames.json
+
+```
+
+JSON Files contain an array of string:
+
+```json
+[
+  "John",
+  "Luke",
+]
+```
+
+### MockJson from another provider
+
+If you have your own files on another provider like AWS S3. You must add the public path in the url attribute.
+
+The files must be in the same place (not separated into folders). And their names should be: **man.json**, **woman.json**, **lastnames.json**
+
+```ts
+// Example
+await mockJson<User>(format, {
+  url: "https://<bucketName>.s3.amazonaws.com/<folder>",
+});
+```
