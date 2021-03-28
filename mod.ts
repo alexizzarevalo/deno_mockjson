@@ -4,6 +4,6 @@ export {
   capitalize,
   uniqueId,
   getRamdonValue,
-} from "./mockjson.ts";
+} from "./src/mockjson.ts";
 
-export type { IConfig, ISuperType } from "./mockjson.ts";
+export type { IConfig, ISuperType } from "./src/mockjson.ts";
